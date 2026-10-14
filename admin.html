@@ -43,8 +43,8 @@ const CONFIG={API_URL:"PEGAR_ACA_LA_URL_DEL_WEB_APP_DE_APPS_SCRIPT"};
 let token=sessionStorage.getItem("impacto_admin_token")||"",quotes=[],current=null;
 document.addEventListener("DOMContentLoaded",()=>{if(token)cargar();});
 
-async function apiPost(data){const r=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)}),j=await r.json();if(!j.ok)throw Error(j.error||"Error");return j}
-async function apiGet(action,params={}){const u=new URL(CONFIG.API_URL);u.searchParams.set("accion",action);u.searchParams.set("token",token);Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));const r=await fetch(u),j=await r.json();if(!j.ok)throw Error(j.error||"Error");return j}
+async function apiPost(data){const c=new AbortController(),t=setTimeout(()=>c.abort(),20000);try{const r=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data),signal:c.signal}),j=await r.json();if(!j.ok)throw Error(j.error||"Error");return j}finally{clearTimeout(t)}}
+async function apiGet(action,params={}){const u=new URL(CONFIG.API_URL);u.searchParams.set("accion",action);u.searchParams.set("token",token);Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));const c=new AbortController(),t=setTimeout(()=>c.abort(),20000);try{const r=await fetch(u,{signal:c.signal}),j=await r.json();if(!j.ok)throw Error(j.error||"Error");return j}finally{clearTimeout(t)}}
 
 async function login(){try{msg("loginMsg","Ingresando...");const j=await apiPost({accion:"adminLogin",email:v("email"),password:v("password")});token=j.token;sessionStorage.setItem("impacto_admin_token",token);await cargar()}catch(e){msg("loginMsg",e.message,true)}}
 async function cargar(){try{const j=await apiGet("adminResumen");quotes=j.cotizaciones||[];showApp(j.usuario);const r=j.resumen;k1.textContent=r.nuevas;k2.textContent=r.revision;k3.textContent=r.cotizadas;k4.textContent=r.ventasMes;k5.textContent=money(r.facturacionMes);renderList()}catch(e){salir(false);msg("loginMsg",e.message,true)}}
