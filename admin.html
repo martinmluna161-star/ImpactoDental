@@ -39,7 +39,7 @@ button,input,select,textarea{font:inherit}.top{background:var(--p);color:#fff;pa
 <div id="modal" class="modal hidden"><div class="box"><div class="head"><div><h2 id="mtitle"></h2><div id="msub" style="color:#667575"></div></div><button class="x" onclick="closeModal()">×</button></div><div id="modalMsg"></div><div id="detail" class="detail"></div></div></div>
 
 <script>
-const CONFIG={API_URL:"PEGAR_ACA_LA_URL_DEL_WEB_APP_DE_APPS_SCRIPT"};
+const CONFIG={API_URL:"https://script.google.com/macros/s/AKfycbyBCR0xK4tuEUMxcVmhLLLT0C7tqzP31aWzKCHuQGaLsRTNt-rIBNJ1ZiVLVKRL2qJt/exec"};
 let token=sessionStorage.getItem("impacto_admin_token")||"",quotes=[],current=null;
 document.addEventListener("DOMContentLoaded",()=>{if(token)cargar();});
 
