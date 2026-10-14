@@ -1,293 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#073b3a">
-  <title>Impacto Dental | Catálogo</title>
-  <style>
-    :root{
-      --petrol:#073b3a; --petrol2:#0b4f4c; --turq:#18d7c4;
-      --ink:#172222; --muted:#657272; --bg:#f4f8f7; --white:#fff;
-      --line:#dbe7e5; --danger:#b42318;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    button,input,select,textarea{font:inherit}
-    .top{background:linear-gradient(135deg,var(--petrol),#092e2e);color:#fff;padding:22px 5vw}
-    .top-inner{max-width:1240px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .brand-mark{width:52px;height:52px;border:2px solid var(--turq);border-radius:50%;display:grid;place-items:center;font-size:26px}
-    .brand h1{font-size:20px;margin:0}.brand p{margin:3px 0 0;color:#bdeee8;font-size:13px}
-    .cart-btn{border:0;background:var(--turq);color:#042d2b;font-weight:800;border-radius:12px;padding:12px 16px;cursor:pointer}
-    .hero{max-width:1240px;margin:28px auto 0;padding:0 5vw}
-    .hero-box{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;grid-template-columns:1.4fr .6fr;gap:20px}
-    .eyebrow{color:var(--petrol2);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
-    .hero h2{font-size:clamp(28px,4vw,48px);line-height:1.02;margin:10px 0}
-    .hero h2 span{color:var(--petrol2)}.hero p{color:var(--muted);max-width:720px}
-    .hero-badge{background:var(--petrol);border-radius:18px;padding:24px;color:#fff;display:flex;flex-direction:column;justify-content:center}
-    .hero-badge strong{font-size:20px}.hero-badge span{color:#bdeee8;margin-top:7px}
-    main{max-width:1240px;margin:22px auto;padding:0 5vw 80px}
-    .controls{display:grid;grid-template-columns:1fr 260px;gap:12px;margin-bottom:20px}
-    .controls input,.controls select,.checkout input,.checkout textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 14px;outline:none}
-    .controls input:focus,.controls select:focus,.checkout input:focus,.checkout textarea:focus{border-color:var(--turq)}
-    .status{margin:10px 0 18px;color:var(--muted);font-size:14px}
-    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-    .card{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden;display:flex;flex-direction:column;min-height:390px}
-    .photo{height:180px;background:linear-gradient(135deg,#e5f4f1,#f9fbfb);display:grid;place-items:center;overflow:hidden}
-    .photo img{width:100%;height:100%;object-fit:cover}.placeholder{font-size:56px;opacity:.7}
-    .body{padding:16px;display:flex;flex-direction:column;flex:1}
-    .cat{font-size:11px;text-transform:uppercase;color:var(--petrol2);font-weight:800;letter-spacing:.04em}
-    .name{font-weight:750;margin:8px 0;line-height:1.25;min-height:44px}
-    .availability{font-size:12px;color:var(--muted);margin-bottom:10px}
-    .price{font-size:21px;font-weight:900;color:var(--petrol);margin-top:auto}
-    .add{margin-top:12px;border:0;background:var(--petrol);color:#fff;border-radius:10px;padding:11px;cursor:pointer;font-weight:750}
-    .add:hover{background:var(--petrol2)}
-    .empty{grid-column:1/-1;text-align:center;background:#fff;border:1px solid var(--line);padding:50px;border-radius:16px}
-    .drawer{position:fixed;inset:0;z-index:20;pointer-events:none}
-    .backdrop{position:absolute;inset:0;background:#0007;opacity:0;transition:.2s}
-    .panel{position:absolute;right:0;top:0;height:100%;width:min(480px,100%);background:#fff;transform:translateX(100%);transition:.25s;display:flex;flex-direction:column}
-    .drawer.open{pointer-events:auto}.drawer.open .backdrop{opacity:1}.drawer.open .panel{transform:none}
-    .panel-head{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-    .panel-head h3{margin:0}.close{border:0;background:transparent;font-size:25px;cursor:pointer}
-    .cart-list{padding:10px 20px;overflow:auto;flex:1}
-    .cart-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
-    .cart-row small{color:var(--muted)}.qty{display:flex;align-items:center;gap:7px}
-    .qty button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
-    .checkout{padding:18px 20px;border-top:1px solid var(--line);background:#fbfdfd}
-    .checkout-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.checkout textarea{margin-top:8px;min-height:68px;resize:vertical}
-    .total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;margin:14px 0}
-    .quote{width:100%;border:0;background:var(--turq);color:#043532;border-radius:12px;padding:14px;font-weight:900;cursor:pointer}
-    .quote:disabled{opacity:.5;cursor:not-allowed}
-    .notice{font-size:11px;color:var(--muted);margin:10px 0 0}
-    .success{background:#e9fbf7;color:#075b51;padding:12px;border-radius:10px;margin-bottom:10px}
-    footer{background:#062f2e;color:#bdeee8;padding:30px 5vw;text-align:center;font-size:13px}
-    @media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:760px){.hero-box{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:520px){.grid{grid-template-columns:1fr}.top-inner{align-items:flex-start}.hero{margin-top:18px}.hero-box{padding:20px}.checkout-grid{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#073b3a">
+<title>Impacto Dental | Catálogo</title>
+<style>
+:root{--p:#073b3a;--p2:#0b504c;--a:#18d7c4;--ink:#152222;--muted:#667575;--bg:#f3f8f7;--line:#d9e7e4;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit}.top{background:var(--p);color:#fff;padding:20px 5vw;position:sticky;top:0;z-index:10}
+.topin{max-width:1240px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border:2px solid var(--a);border-radius:50%;display:grid;place-items:center;font-size:25px}
+.brand b{font-size:19px}.brand small{display:block;color:#b8eee7;margin-top:3px}.cartbtn,.primary{border:0;background:var(--a);color:#043431;font-weight:900;border-radius:11px;padding:12px 15px;cursor:pointer}
+.hero,main{max-width:1240px;margin:24px auto;padding:0 5vw}.heroBox{background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;grid-template-columns:1.45fr .55fr;gap:20px}
+.ey{font-size:11px;letter-spacing:.1em;font-weight:900;color:var(--p2)}h1{font-size:clamp(30px,4vw,48px);line-height:1.03;margin:9px 0}.green{color:var(--p2)}.hero p{color:var(--muted);line-height:1.5}.badge{background:var(--p);color:#fff;border-radius:18px;padding:24px;display:flex;flex-direction:column;justify-content:center}.badge span{color:#b8eee7;margin-top:7px}
+.controls{display:grid;grid-template-columns:1fr 270px;gap:12px}.controls input,.controls select,.form input,.form textarea{border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px;width:100%;outline:none}.status{margin:16px 0;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden;display:flex;flex-direction:column;min-height:405px}.photo{height:190px;overflow:hidden;background:linear-gradient(135deg,#dff1ee,#f9fcfb);position:relative;display:grid;place-items:center}.photo img{width:100%;height:100%;object-fit:cover}.ph{font-size:60px}.tag{position:absolute;top:10px;left:10px;background:var(--p);color:#fff;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900}
+.body{padding:15px;display:flex;flex-direction:column;flex:1}.cat{font-size:10px;font-weight:900;color:var(--p2);text-transform:uppercase}.name{font-weight:800;line-height:1.25;margin:7px 0}.desc{font-size:12px;color:var(--muted);line-height:1.35;margin-bottom:8px}.avail{font-size:12px;color:var(--muted);margin-top:auto}.price{font-size:20px;font-weight:900;color:var(--p);margin-top:5px}.add{border:0;background:var(--p);color:#fff;border-radius:10px;padding:11px;margin-top:11px;font-weight:800;cursor:pointer}
+.drawer{position:fixed;inset:0;z-index:30;pointer-events:none}.back{position:absolute;inset:0;background:#0007;opacity:0;transition:.2s}.panel{position:absolute;right:0;top:0;width:min(500px,100%);height:100%;background:#fff;transform:translateX(100%);transition:.25s;display:flex;flex-direction:column}.drawer.open{pointer-events:auto}.drawer.open .back{opacity:1}.drawer.open .panel{transform:none}
+.head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.head h2{margin:0;font-size:20px}.x{border:0;background:none;font-size:25px}.items{padding:8px 20px;overflow:auto;flex:1}.row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:13px 0;border-bottom:1px solid var(--line)}.qty{display:flex;align-items:center;gap:7px}.qty button{width:29px;height:29px;border:1px solid var(--line);background:#fff;border-radius:8px}.form{padding:18px 20px;border-top:1px solid var(--line);background:#fbfdfd}.fg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.form textarea{margin-top:8px}.total{display:flex;justify-content:space-between;font-size:19px;font-weight:900;margin:13px 0}.note{font-size:11px;color:var(--muted)}.success{background:#e8faf6;border:1px solid #b8eadf;padding:13px;border-radius:11px;margin-bottom:10px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.secondary{border:1px solid var(--p);background:#fff;color:var(--p);font-weight:850;border-radius:10px;padding:10px 12px;cursor:pointer}.empty{text-align:center;padding:45px;background:#fff;border:1px solid var(--line);border-radius:15px;grid-column:1/-1}footer{background:var(--p);color:#b8eee7;text-align:center;padding:28px}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.heroBox{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}.fg{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<header class="top">
-  <div class="top-inner">
-    <div class="brand">
-      <div class="brand-mark">🦷</div>
-      <div><h1>IMPACTO DENTAL</h1><p>Insumos que impulsan tu profesión</p></div>
-    </div>
-    <button class="cart-btn" onclick="openCart()">Solicitud <span id="cartCount">0</span></button>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-box">
-    <div>
-      <div class="eyebrow">Catálogo profesional</div>
-      <h2>Todo para tu práctica <span>odontológica.</span></h2>
-      <p>Consultorio, laboratorio, ortodoncia, restauración, estética, instrumental y equipamiento. Seleccioná lo que necesitás y envianos tu solicitud de cotización.</p>
-    </div>
-    <div class="hero-badge"><strong>Impacto Dental</strong><span>San Luis · Consultas · Cotizaciones · Envíos</span></div>
-  </div>
-</section>
-
-<main>
-  <div class="controls">
-    <input id="search" placeholder="Buscar producto, categoría o código..." oninput="renderProducts()">
-    <select id="category" onchange="renderProducts()"><option value="">Todas las categorías</option></select>
-  </div>
-  <div class="status" id="status">Cargando catálogo...</div>
-  <section class="grid" id="products"></section>
-</main>
-
-<div class="drawer" id="drawer">
-  <div class="backdrop" onclick="closeCart()"></div>
-  <aside class="panel">
-    <div class="panel-head"><h3>Solicitud de cotización</h3><button class="close" onclick="closeCart()">×</button></div>
-    <div class="cart-list" id="cartList"></div>
-    <div class="checkout">
-      <div id="successBox"></div>
-      <div class="checkout-grid">
-        <input id="clientName" placeholder="Nombre / Razón social *">
-        <input id="clientPhone" placeholder="WhatsApp *">
-        <input id="clientEmail" placeholder="Email">
-        <input id="clientCity" placeholder="Localidad">
-      </div>
-      <textarea id="notes" placeholder="Observaciones"></textarea>
-      <div class="total"><span>Total estimado</span><span id="cartTotal">$ 0</span></div>
-      <button class="quote" id="quoteBtn" onclick="sendQuote()">SOLICITAR COTIZACIÓN</button>
-      <p class="notice">La solicitud queda sujeta a confirmación de disponibilidad y condiciones comerciales.</p>
-    </div>
-  </aside>
-</div>
-
+<header class="top"><div class="topin"><div class="brand"><div class="logo">🦷</div><div><b>IMPACTO DENTAL</b><small>Insumos que impulsan tu profesión</small></div></div><button class="cartbtn" onclick="openCart()">Solicitud <span id="count">0</span></button></div></header>
+<section class="hero"><div class="heroBox"><div><div class="ey">CATÁLOGO PROFESIONAL</div><h1>Todo para tu práctica <span class="green">odontológica.</span></h1><p>Insumos, laboratorio, ortodoncia, restauración, instrumental y equipamiento. Los productos bajo pedido se cotizan especialmente.</p></div><div class="badge"><b>Impacto Dental</b><span>San Luis · Cotizaciones · Envíos</span></div></div></section>
+<main><div class="controls"><input id="q" placeholder="Buscar producto, categoría o código..." oninput="render()"><select id="cat" onchange="render()"><option value="">Todas las categorías</option></select></div><div class="status" id="status">Cargando catálogo...</div><div class="grid" id="grid"></div></main>
+<div class="drawer" id="drawer"><div class="back" onclick="closeCart()"></div><aside class="panel"><div class="head"><h2>Solicitud de cotización</h2><button class="x" onclick="closeCart()">×</button></div><div class="items" id="items"></div><div class="form"><div id="result"></div><div class="fg"><input id="name" placeholder="Nombre / Razón social *"><input id="phone" placeholder="WhatsApp *"><input id="email" placeholder="Email"><input id="city" placeholder="Localidad"></div><textarea id="notes" placeholder="Observaciones"></textarea><div class="total"><span>Total informado</span><span id="total">$ 0</span></div><button class="primary" id="send" style="width:100%" onclick="sendQuote()">SOLICITAR COTIZACIÓN</button><div class="note">Los productos “Bajo pedido” pueden quedar sin precio hasta que Impacto Dental confirme disponibilidad y cotización.</div></div></aside></div>
 <footer>IMPACTO DENTAL · Insumos que impulsan tu profesión</footer>
-
 <script>
-/*****************************************************************
- * CONFIGURACIÓN
- * PEGÁ LA URL DEL WEB APP DE APPS SCRIPT EN API_URL.
- * Ejemplo: https://script.google.com/macros/s/XXXXXXXXXXXX/exec
- *****************************************************************/
-const CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbxrE7QGw759eUkOtuf7ALNay4IXuuWdR7wlFII8MelarmIfSj4vFZ9ZcEpYyK_PRSnq/exec",
-  WHATSAPP: "5492665239450",
-  CURRENCY: "ARS"
+/* ===== CONFIGURACIÓN: EDITAR SOLO ESTAS DOS LÍNEAS ===== */
+const CONFIG={
+  API_URL:"https://script.google.com/macros/s/AKfycbyBCR0xK4tuEUMxcVmhLLLT0C7tqzP31aWzKCHuQGaLsRTNt-rIBNJ1ZiVLVKRL2qJt/exec",
+  WHATSAPP:"5492665239450"
 };
+/* ====================================================== */
+let catalog=[],cart={},lastPdf=null;
 
-let catalog = [];
-let cart = {};
-
-document.addEventListener("DOMContentLoaded", loadCatalog);
-
-async function loadCatalog() {
-  const status = document.getElementById("status");
-  try {
-    if (!CONFIG.API_URL.startsWith("https://script.google.com/")) {
-      throw new Error("Falta configurar API_URL en index.html.");
-    }
-    const res = await fetch(CONFIG.API_URL + "?accion=catalogo");
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error || "No se pudo cargar el catálogo.");
-    catalog = json.productos || [];
-    buildCategories();
-    renderProducts();
-  } catch (err) {
-    status.textContent = err.message;
-    document.getElementById("products").innerHTML =
-      '<div class="empty">No pudimos cargar el catálogo.<br><small>' + escapeHtml(err.message) + '</small></div>';
-  }
+const fallback={
+ "Instrumental":"https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=900&q=80",
+ "Equipamiento":"https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=900&q=80",
+ "Ortodoncia":"https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=900&q=80",
+ "Laboratorio y Mecánica Dental":"https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=900&q=80",
+ "Descartables e Insumos Clínicos":"https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=900&q=80",
+ "Composites y Blanqueamiento":"https://images.unsplash.com/photo-1606265752439-1f18756aa376?auto=format&fit=crop&w=900&q=80"
+};
+document.addEventListener("DOMContentLoaded",()=>{
+  const slowTimer=setTimeout(()=>{
+    const s=document.getElementById("status");
+    if(s && s.textContent==="Cargando catálogo...") s.textContent="Conectando con el catálogo… la primera carga puede demorar unos segundos.";
+  },5000);
+  load().finally(()=>clearTimeout(slowTimer));
+});
+async function load(){
+ try{
+  if(!CONFIG.API_URL.startsWith("https://script.google.com/"))throw Error("Falta configurar API_URL.");
+  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),20000);
+  const r=await fetch(CONFIG.API_URL+"?accion=catalogo",{signal:controller.signal});clearTimeout(timeout);
+  const j=await r.json();if(!j.ok)throw Error(j.error||"Error API");
+  catalog=j.productos||[];categories();render();
+ }catch(e){document.getElementById("status").textContent=e.message;document.getElementById("grid").innerHTML='<div class="empty">No se pudo cargar el catálogo.</div>'}
 }
-
-function buildCategories() {
-  const select = document.getElementById("category");
-  [...new Set(catalog.map(p => p.categoria).filter(Boolean))].sort()
-    .forEach(cat => {
-      const o = document.createElement("option");
-      o.value = cat; o.textContent = cat; select.appendChild(o);
-    });
+function categories(){const s=document.getElementById("cat");[...new Set(catalog.map(x=>x.categoria).filter(Boolean))].sort().forEach(x=>{const o=document.createElement("option");o.value=x;o.textContent=x;s.appendChild(o)})}
+function render(){
+ const q=document.getElementById("q").value.toLowerCase(),c=document.getElementById("cat").value;
+ const a=catalog.filter(x=>(!q||(`${x.producto} ${x.categoria} ${x.codigo} ${x.marca}`).toLowerCase().includes(q))&&(!c||x.categoria===c));
+ document.getElementById("status").textContent=a.length+" productos";
+ document.getElementById("grid").innerHTML=a.length?a.map(card).join(""):'<div class="empty">No encontramos productos.</div>';
 }
-
-function renderProducts() {
-  const q = document.getElementById("search").value.toLowerCase().trim();
-  const cat = document.getElementById("category").value;
-  const filtered = catalog.filter(p => {
-    const text = `${p.producto||""} ${p.categoria||""} ${p.codigo||""}`.toLowerCase();
-    return (!q || text.includes(q)) && (!cat || p.categoria === cat) && p.publicarWeb !== false;
-  });
-  document.getElementById("status").textContent = `${filtered.length} productos`;
-  const grid = document.getElementById("products");
-  if (!filtered.length) {
-    grid.innerHTML = '<div class="empty">No encontramos productos con ese criterio.</div>';
-    return;
-  }
-  grid.innerHTML = filtered.map(p => `
-    <article class="card">
-      <div class="photo">
-        ${p.imagenUrl ? `<img src="${escapeAttr(p.imagenUrl)}" alt="${escapeAttr(p.producto)}" onerror="this.parentNode.innerHTML='<div class=&quot;placeholder&quot;>🦷</div>'">` : '<div class="placeholder">🦷</div>'}
-      </div>
-      <div class="body">
-        <div class="cat">${escapeHtml(p.categoria || "Impacto Dental")}</div>
-        <div class="name">${escapeHtml(p.producto)}</div>
-        <div class="availability">${availabilityText(p)}</div>
-        <div class="price">${money(p.precio)}</div>
-        <button class="add" onclick="addToCart('${escapeJs(p.idProducto)}')">Agregar a solicitud</button>
-      </div>
-    </article>`).join("");
+function card(p){
+ const bajo=p.modalidad==="BAJO_PEDIDO",img=p.imagenUrl||fallback[p.categoria]||"";
+ const price=p.precio>0?money(p.precio):"Solicitar cotización";
+ return `<article class="card"><div class="photo">${img?`<img src="${attr(img)}" alt="${attr(p.producto)}" onerror="this.style.display='none'">`:'<div class="ph">🦷</div>'}${bajo?'<span class="tag">BAJO PEDIDO</span>':''}</div><div class="body"><div class="cat">${esc(p.categoria)}</div><div class="name">${esc(p.producto)}</div>${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:""}<div class="avail">${bajo?"Consultar disponibilidad":p.stock>0?"Disponible":"Consultar disponibilidad"}</div><div class="price">${price}</div><button class="add" onclick="add('${js(p.idProducto)}')">Agregar a solicitud</button></div></article>`
 }
-
-function availabilityText(p) {
-  if (p.modalidad === "BAJO_PEDIDO") return "Bajo pedido · Consultar disponibilidad";
-  return p.stock > 0 ? "Disponible" : "Consultar disponibilidad";
+function add(id){const p=catalog.find(x=>String(x.idProducto)===String(id));if(!p)return;if(!cart[id])cart[id]={p,qty:0};cart[id].qty++;renderCart();openCart()}
+function qty(id,d){if(!cart[id])return;cart[id].qty+=d;if(cart[id].qty<=0)delete cart[id];renderCart()}
+function renderCart(){const a=Object.values(cart);document.getElementById("count").textContent=a.reduce((s,x)=>s+x.qty,0);document.getElementById("items").innerHTML=a.length?a.map(x=>`<div class="row"><div><b>${esc(x.p.producto)}</b><br><small>${x.p.precio>0?money(x.p.precio):"A cotizar"} · ${x.p.modalidad==="BAJO_PEDIDO"?"Bajo pedido":"Stock"}</small></div><div class="qty"><button onclick="qty('${js(x.p.idProducto)}',-1)">−</button><b>${x.qty}</b><button onclick="qty('${js(x.p.idProducto)}',1)">+</button></div></div>`).join(""):'<div class="empty">Todavía no agregaste productos.</div>';document.getElementById("total").textContent=money(a.reduce((s,x)=>s+(Number(x.p.precio)||0)*x.qty,0));document.getElementById("send").disabled=!a.length}
+async function sendQuote(){
+ const a=Object.values(cart),name=v("name"),phone=v("phone");if(!a.length)return alert("Agregá productos.");if(!name||!phone)return alert("Completá nombre y WhatsApp.");
+ const b=document.getElementById("send");b.disabled=true;b.textContent="GENERANDO...";
+ try{
+  const payload={accion:"crearCotizacion",data:{cliente:name,telefono:phone,email:v("email"),localidad:v("city"),observaciones:v("notes"),origen:"CATALOGO_WEB",productos:a.map(x=>({idProducto:x.p.idProducto,cantidad:x.qty}))}};
+  const r=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}),j=await r.json();if(!j.ok)throw Error(j.error||"No se pudo crear.");
+  lastPdf=j.pdfBase64?{b64:j.pdfBase64,name:j.pdfNombre}:null;
+  document.getElementById("result").innerHTML=`<div class="success"><b>✓ Solicitud ${esc(j.idCotizacion)} generada</b><br>${j.tieneAPedido?"Incluye productos bajo pedido que serán cotizados/confirmados.":""}${j.emailEnviado?"<br>También enviamos el PDF al email informado.":""}<div class="actions">${lastPdf?'<button class="secondary" onclick="downloadPdf()">Descargar PDF</button>':''}<button class="secondary" onclick="sendWhatsApp('${js(j.idCotizacion)}')">Enviar por WhatsApp</button></div></div>`;
+  cart={};renderCart();
+ }catch(e){alert(e.message)}finally{b.disabled=false;b.textContent="SOLICITAR COTIZACIÓN"}
 }
-
-function addToCart(id) {
-  const p = catalog.find(x => String(x.idProducto) === String(id));
-  if (!p) return;
-  if (!cart[id]) cart[id] = {product:p, qty:0};
-  cart[id].qty++;
-  renderCart();
-  openCart();
-}
-
-function changeQty(id, delta) {
-  if (!cart[id]) return;
-  cart[id].qty += delta;
-  if (cart[id].qty <= 0) delete cart[id];
-  renderCart();
-}
-
-function renderCart() {
-  const items = Object.values(cart);
-  document.getElementById("cartCount").textContent = items.reduce((s,x)=>s+x.qty,0);
-  const list = document.getElementById("cartList");
-  if (!items.length) list.innerHTML = '<div class="empty">Todavía no agregaste productos.</div>';
-  else list.innerHTML = items.map(x => `
-    <div class="cart-row">
-      <div><strong>${escapeHtml(x.product.producto)}</strong><br><small>${money(x.product.precio)} c/u</small></div>
-      <div class="qty">
-        <button onclick="changeQty('${escapeJs(x.product.idProducto)}',-1)">−</button>
-        <strong>${x.qty}</strong>
-        <button onclick="changeQty('${escapeJs(x.product.idProducto)}',1)">+</button>
-      </div>
-    </div>`).join("");
-  const total = items.reduce((s,x)=>s+(Number(x.product.precio)||0)*x.qty,0);
-  document.getElementById("cartTotal").textContent = money(total);
-  document.getElementById("quoteBtn").disabled = !items.length;
-}
-
-async function sendQuote() {
-  const items = Object.values(cart);
-  const cliente = document.getElementById("clientName").value.trim();
-  const telefono = document.getElementById("clientPhone").value.trim();
-  if (!items.length) return alert("Agregá al menos un producto.");
-  if (!cliente || !telefono) return alert("Completá nombre y WhatsApp.");
-
-  const btn = document.getElementById("quoteBtn");
-  btn.disabled = true; btn.textContent = "ENVIANDO...";
-
-  const payload = {
-    accion: "crearCotizacion",
-    data: {
-      cliente,
-      telefono,
-      email: document.getElementById("clientEmail").value.trim(),
-      localidad: document.getElementById("clientCity").value.trim(),
-      observaciones: document.getElementById("notes").value.trim(),
-      origen: "CATALOGO_WEB",
-      productos: items.map(x => ({idProducto:x.product.idProducto, cantidad:x.qty}))
-    }
-  };
-
-  try {
-    const res = await fetch(CONFIG.API_URL, {
-      method: "POST",
-      headers: {"Content-Type":"text/plain;charset=utf-8"},
-      body: JSON.stringify(payload)
-    });
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error || "No se pudo crear la cotización.");
-
-    document.getElementById("successBox").innerHTML =
-      `<div class="success"><strong>Solicitud recibida.</strong><br>Número: ${escapeHtml(json.idCotizacion)}<br>Total estimado: ${money(json.total)}</div>`;
-
-    const message = `Hola Impacto Dental. Generé la solicitud ${json.idCotizacion} desde el catálogo. Mi nombre es ${cliente}.`;
-    if (CONFIG.WHATSAPP && !CONFIG.WHATSAPP.includes("X")) {
-      window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(message)}`, "_blank");
-    }
-    cart = {}; renderCart();
-  } catch (err) {
-    alert(err.message);
-  } finally {
-    btn.disabled = false; btn.textContent = "SOLICITAR COTIZACIÓN";
-  }
-}
-
-function openCart(){document.getElementById("drawer").classList.add("open")}
-function closeCart(){document.getElementById("drawer").classList.remove("open")}
-function money(n){return new Intl.NumberFormat("es-AR",{style:"currency",currency:CONFIG.CURRENCY,maximumFractionDigits:0}).format(Number(n)||0)}
-function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function escapeAttr(v){return escapeHtml(v)}
-function escapeJs(v){return String(v??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+function downloadPdf(){if(!lastPdf)return;const bin=atob(lastPdf.b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);const url=URL.createObjectURL(new Blob([u],{type:"application/pdf"})),a=document.createElement("a");a.href=url;a.download=lastPdf.name||"cotizacion.pdf";a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+function sendWhatsApp(id){if(CONFIG.WHATSAPP.includes("X"))return alert("Configurá WHATSAPP en index.html.");window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent("Hola Impacto Dental. Generé la solicitud "+id+" desde el catálogo.")}`,"_blank")}
+function openCart(){document.getElementById("drawer").classList.add("open")}function closeCart(){document.getElementById("drawer").classList.remove("open")}
+function v(id){return document.getElementById(id).value.trim()}function money(n){return new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0}).format(Number(n)||0)}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}function attr(v){return esc(v)}function js(v){return String(v??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
 renderCart();
-</script>
-</body>
-</html>
+</script></body></html>
